@@ -1,4 +1,4 @@
-# Mandalas
+# Colora
 
 Juego de colorear por números con React, TypeScript, Vite y Canvas. Incluye un girasol, una rosa roja y una casa en la playa, con ilustraciones y paletas independientes.
 

@@ -51,3 +51,7 @@ it('prepara la playa con piezas identificables y números dentro del lienzo', ()
   expect(new Set(beachRegions.map(r=>r.id)).size).toBe(beachRegions.length);
   expect(beachRegions.every(r=>r.x >= 20 && r.x <= 1234 && r.y >= 20 && r.y <= 1234 && r.n >= 1 && r.n <= 12)).toBe(true);
 });
+
+it('incluye el fondo de la rosa como una pieza para colorear de negro', () => {
+  expect(roseRegions.some(region => region.n === 9 && region.x === 100 && region.y === 100)).toBe(true);
+});
