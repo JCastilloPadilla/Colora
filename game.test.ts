@@ -45,3 +45,9 @@ it('prepara la rosa con identificadores únicos y números dentro del lienzo', (
   expect(new Set(roseRegions.map(r=>r.id)).size).toBe(roseRegions.length);
   expect(roseRegions.every(r=>r.x >= 20 && r.x <= 1234 && r.y >= 20 && r.y <= 1234 && r.n >= 1 && r.n <= 10)).toBe(true);
 });
+
+import beachRegions from './src/beach-regions.json';
+it('prepara la playa con piezas identificables y números dentro del lienzo', () => {
+  expect(new Set(beachRegions.map(r=>r.id)).size).toBe(beachRegions.length);
+  expect(beachRegions.every(r=>r.x >= 20 && r.x <= 1234 && r.y >= 20 && r.y <= 1234 && r.n >= 1 && r.n <= 12)).toBe(true);
+});
