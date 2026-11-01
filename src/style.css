@@ -1,0 +1,31 @@
+
+:root{font-family:system-ui,-apple-system,sans-serif;color:#243a36;background:#e9eeea}*{box-sizing:border-box}body{margin:0}header{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;background:#f9faf6} .brand{font-family:Georgia,serif;font-size:24px;font-weight:bold;letter-spacing:-1px}.brand span{color:#d47d63}.tag{font-size:13px;color:#62756e}main{max-width:1320px;margin:auto;padding:40px 5vw 55px}.intro{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:25px}h1{font:normal clamp(35px,4vw,54px)/1.05 Georgia,serif;letter-spacing:-1.8px;margin:0 0 10px}p{margin:0;color:#65766e;line-height:1.5}.counter{font-size:14px;color:#516960;white-space:nowrap}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:24px}.canvas{background:#f9faf6;min-height:570px;display:flex;align-items:center;justify-content:center;padding:24px;position:relative}.canvas svg{width:min(100%,600px);height:auto;max-height:650px;overflow:visible}.region{fill:#fffefa;stroke:#89958a;stroke-width:1.2;cursor:pointer;transition:fill .2s,stroke .2s}.region:hover,.region:focus{stroke:#263e36;stroke-width:2;outline:none}.region.done{stroke:#f9faf6;stroke-width:1.5}.number{font:600 11px system-ui;fill:#748076;pointer-events:none;text-anchor:middle;dominant-baseline:central}.side{background:#f9faf6;padding:28px 25px;display:flex;flex-direction:column}.side h2{font:normal 27px Georgia,serif;margin:0 0 8px}.side p{font-size:14px}.palette{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:25px 0}.swatch{border:3px solid transparent;background:transparent;padding:3px;border-radius:50%;aspect-ratio:1;cursor:pointer}.swatch[aria-pressed=true]{border-color:#293f37}.swatch span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;font-weight:700;font-size:13px;color:#263b31}.hint{padding:16px;background:#edf2eb;color:#52695f;font-size:13px;line-height:1.5}.hint strong{display:block;color:#263e36;margin-bottom:4px}.bottom{margin-top:auto;padding-top:30px}.progress{height:6px;background:#e1e9e0;border-radius:5px;overflow:hidden;margin:10px 0}.progress span{display:block;height:100%;background:#6d967a;width:0;transition:width .2s}.progress-label{display:flex;justify-content:space-between;font-size:13px;color:#52695f}.reset{margin-top:22px;width:100%;padding:13px;border:1px solid #b5c3b7;background:transparent;color:#324c3f;font:inherit;cursor:pointer}.reset:hover{background:#e7eee7}.message{min-height:23px;color:#a4513d;font-size:13px;margin-top:12px}.foot{font-size:13px;margin-top:20px;color:#74867d}@media(max-width:760px){header{height:62px}.tag{display:none}main{padding-top:28px}.intro{display:block}.counter{margin-top:16px}.workspace{display:flex;flex-direction:column}.canvas{min-height:0;padding:16px}.side{padding:22px}.palette{grid-template-columns:repeat(8,1fr);gap:6px}.bottom{padding-top:15px}.swatch span{font-size:11px}}@media(max-width:400px){.palette{grid-template-columns:repeat(4,1fr)}.canvas{padding:6px}}
+
+
+/* El papel y su marco mantienen el dibujo separado de la mesa de trabajo. */
+.canvas svg{background:#fffefa;border:12px solid #755b45;outline:3px solid #594434;outline-offset:-3px;padding:18px;box-shadow:inset 0 0 0 2px #dfd7c8,0 8px 18px #243a361c;cursor:crosshair}
+.region{cursor:crosshair}
+.number{fill:#405148}
+@media(max-width:760px){.canvas svg{border-width:8px;padding:10px}}
+.canvas svg,.region{cursor:url('./crosshair.svg') 9 9,crosshair}
+
+/* Paleta vertical junto al lienzo. */
+.canvas{gap:clamp(10px,2vw,24px)}
+.canvas svg{width:min(calc(100% - 58px),600px);flex-shrink:1}
+.palette{flex:0 0 auto;display:flex;flex-direction:column;gap:4px;margin:0;padding:7px;background:#fffefa;border-radius:22px;box-shadow:0 3px 12px #243a3624}
+.swatch{width:38px;height:38px;aspect-ratio:auto;padding:3px}
+.swatch span{font-size:12px}
+@media(max-width:760px){.canvas{gap:8px}.canvas svg{width:calc(100% - 46px)}.palette{gap:3px;padding:5px}.swatch{width:32px;height:32px}}
+/* Muestras cuadradas con esquinas suaves, como la paleta de referencia. */
+.swatch{border-radius:8px}
+.swatch span{border-radius:5px}
+.palette{gap:1px}
+.swatch{border:2px solid transparent;padding:2px}
+.swatch[aria-pressed=true]{border-color:#b5c4b6}
+@media(max-width:760px){.palette{gap:1px}}
+/* Mantener los límites de cada pieza visibles al colorear. */
+.region,.region.done{stroke:#333b35;stroke-width:1.2}
+.region:hover,.region:focus,.region.done:hover,.region.done:focus{stroke:#111b15;stroke-width:2}
+.region:hover,.region:focus,.region.done:hover,.region.done:focus{stroke:#333b35;stroke-width:1.2}
+.region:focus-visible{outline:2px solid #718d7a;outline-offset:2px}
+.swatch:disabled{opacity:.35;cursor:default}
