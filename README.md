@@ -1,6 +1,6 @@
 # Mandalas
 
-Primera versión de un juego de colorear por números, construido con React, TypeScript, Vite y SVG.
+Juego de colorear por números con React, TypeScript, Vite y Canvas. Incluye un girasol y una rosa roja, con ilustraciones y paletas independientes.
 
 ## Empezar
 
@@ -11,11 +11,10 @@ npm install
 npm run dev
 ```
 
-Abre la dirección que muestra Vite. Elige un color y selecciona las piezas con ese número. El progreso se mantiene mientras la página esté abierta; todavía no se guarda al recargar.
+Abre la dirección que muestra Vite y elige una ilustración. Puedes pintar cualquier pieza, borrar o deshacer una acción. Un color se completa cuando todas sus piezas tienen el color indicado. El progreso se conserva al cambiar de ilustración, mientras la página permanezca abierta; todavía no se guarda al recargar.
 
 ## Comandos
 
 - `npm run dev`: servidor de desarrollo.
 - `npm test`: pruebas de las reglas del juego.
 - `npm run build`: comprueba TypeScript y genera la versión de producción en `dist/`.
-
