@@ -55,3 +55,18 @@ it('prepara la playa con piezas identificables y números dentro del lienzo', ()
 it('incluye el fondo de la rosa como una pieza para colorear de negro', () => {
   expect(roseRegions.some(region => region.n === 9 && region.x === 100 && region.y === 100)).toBe(true);
 });
+
+import { normalizeArtistName } from './game';
+it('prepara un nombre legible y rechaza entradas vacías', () => {
+  expect(normalizeArtistName('  Ana   María  ')).toBe('Ana María');
+  expect(normalizeArtistName('   ')).toBe('');
+});
+
+import { makeSignature } from './src/signature-paths';
+it('prepara trazos reales para nombres con espacios y acentos', () => {
+  const result=makeSignature('José Ávila');
+  expect(result).not.toBeNull();
+  expect(result!.strokes.length).toBeGreaterThan(9);
+  expect(result!.width).toBeGreaterThan(0);
+  expect(makeSignature('李')).toBeNull();
+});

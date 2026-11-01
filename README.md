@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Abre la dirección que muestra Vite y elige una ilustración. Puedes pintar cualquier pieza, borrar o deshacer una acción. Un color se completa cuando todas sus piezas tienen el color indicado. El progreso se conserva al cambiar de ilustración, mientras la página permanezca abierta; todavía no se guarda al recargar.
+Abre la dirección que muestra Vite, escribe tu nombre y elige una ilustración. Puedes pintar cualquier pieza, borrar o deshacer una acción. Un color se completa cuando todas sus piezas tienen el color indicado. Al completar una ilustración se reproduce tu proceso y la obra aparece enmarcada y firmada. El nombre y el progreso se conservan al cambiar de ilustración mientras la página permanezca abierta; todavía no se guardan al recargar.
 
 ## Comandos
 

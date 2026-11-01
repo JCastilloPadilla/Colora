@@ -17,3 +17,6 @@ export function newlyCompletedColor(regions: ReadonlyArray<{id:string; n:number}
   if (color === null) return null;
   return availableColors(regions, before).includes(color) && !availableColors(regions, after).includes(color) ? color : null;
 }
+export function normalizeArtistName(name: string): string {
+  return name.trim().replace(/\s+/gu, ' ');
+}
