@@ -242,3 +242,9 @@ header{flex:0 0 72px}
 .artist-control-label{color:#405d4d;font-weight:600}.artist-control strong{color:#1d392e;font-size:14px}.artist-control svg{width:19px;height:19px;stroke:#345b43;stroke-width:1.6}
 .artist-control:hover{background:#dceadd;border-color:#71937a}
 @media(max-width:760px){.artist-control{font-size:12px;padding:5px 8px}.artist-control strong{font-size:12px}.artist-control svg{width:17px;height:17px}}
+/* La lista de ilustraciones puede crecer sin desbordar la pantalla. */
+.drawing-list{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.drawing-option{flex:0 0 auto}
+.drawing-option img{width:min(100%,clamp(34px,calc((100dvh - 260px)/5),100px))}
+@media(max-width:760px){.drawing-option img{width:min(100%,clamp(28px,calc((100dvh - 240px)/5),60px))}}
+.drawing-option img[src$="/gato.png"]{object-view-box:inset(1.7%)}

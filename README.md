@@ -1,6 +1,6 @@
 # Colora
 
-Juego de colorear por números con React, TypeScript, Vite y Canvas. Incluye un girasol, una rosa roja, una casa en la playa y un capibara con nieve, con ilustraciones y paletas independientes.
+Juego de colorear por números con React, TypeScript, Vite y Canvas. Incluye un girasol, una rosa roja, una casa en la playa un capibara con nieve y un gato en una librería, con ilustraciones y paletas independientes.
 
 ## Empezar
 

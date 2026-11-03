@@ -96,3 +96,10 @@ it('asigna los colores revisados al cielo, letrero, muebles y lámpara', () => {
   expect([color('22'),color('18'),color('153'),color('166'),color('210')]).toEqual([7,13,10,10,15]);
   expect([color('128'),color('133'),color('211'),color('212'),color('213')]).toEqual([9,5,2,9,11]);
 });
+
+import catRegions from './src/cat-regions.json';
+it('prepara el gato con dificultad intermedia y colores válidos', () => {
+  expect(catRegions.length).toBeGreaterThan(regions.length);
+  expect(catRegions.length).toBeLessThan(capybaraRegions.length);
+  expect(catRegions.every((region,index)=>region.id===String(index+1)&&region.n>=1&&region.n<=15&&region.x>=20&&region.x<=1234&&region.y>=20&&region.y<=1234)).toBe(true);
+});
