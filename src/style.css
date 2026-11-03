@@ -211,3 +211,34 @@ header{flex:0 0 72px}
 /* Una inclinación más suave mantiene la firma manuscrita y legible. */
 .canvas .artwork-signature .signature-strokes{transform:skewX(8deg);transform-origin:center}
 .artwork-signed .artwork-signature{transform:rotate(-1deg)}
+/* Cuatro miniaturas visibles sin desplazar la página. */
+.drawing-option img{width:min(100%,clamp(34px,calc((100dvh - 245px)/4),100px))}
+.drawing-list{gap:clamp(3px,.7vh,10px)}
+@media(max-width:760px){.drawing-option img{width:min(100%,clamp(30px,calc((100dvh - 225px)/4),62px))}}
+/* La paleta de trece colores también cabe en la altura disponible. */
+.swatch{width:clamp(22px,calc((100dvh - 240px)/15),38px);height:clamp(22px,calc((100dvh - 240px)/15),38px)}
+.tool{width:clamp(22px,calc((100dvh - 240px)/15),38px);height:clamp(22px,calc((100dvh - 240px)/15),34px)}
+/* La paleta ampliada conserva espacio para sus herramientas. */
+.swatch{width:clamp(20px,calc((100dvh - 235px)/17),38px);height:clamp(20px,calc((100dvh - 235px)/17),38px)}
+.tool{width:clamp(20px,calc((100dvh - 235px)/17),38px);height:clamp(20px,calc((100dvh - 235px)/17),34px)}
+
+/* La paleta mantiene las herramientas a mano y desplaza solo los colores. */
+.palette{max-height:min(440px,calc(100dvh - 300px));min-height:118px;gap:0;padding:6px;overflow:hidden}
+.palette-colors{display:flex;flex-direction:column;align-items:center;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#c2cfc4 transparent}
+.palette-colors::-webkit-scrollbar{width:4px}.palette-colors::-webkit-scrollbar-thumb{background:#c2cfc4;border-radius:4px}
+.palette-tools{display:flex;flex:0 0 auto;flex-direction:column;align-items:center;padding-top:4px;margin-top:4px;border-top:1px solid #e7ece6}
+.swatch{flex:0 0 auto;width:34px;height:34px}
+.tool{flex:0 0 auto;width:34px;height:31px}
+.intro-title{display:flex;align-items:center;gap:18px;min-width:0;flex-wrap:wrap}
+.intro-title h1{margin-bottom:10px}
+.artist-control{display:inline-flex;align-items:center;gap:7px;min-width:0;max-width:220px;margin:0 0 10px;padding:7px 10px;border:1px solid #cfdbd1;border-radius:20px;background:#f7faf6;color:#38534a;font:inherit;font-size:12px;cursor:pointer;transition:background .2s,border-color .2s}
+.artist-control:hover{background:#edf4ed;border-color:#a9bdaa}.artist-control:focus-visible{outline:2px solid #587b60;outline-offset:3px}
+.artist-control-label{color:#788b80}.artist-control strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}.artist-control svg{flex:none;width:15px;height:15px;fill:none;stroke:#698775;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:760px){.palette{max-height:min(360px,calc(100dvh - 250px));min-height:100px;padding:4px}.swatch{width:30px;height:30px}.tool{width:30px;height:27px}.palette-tools{padding-top:3px;margin-top:3px}.intro-title{gap:8px}.intro-title h1{margin-bottom:6px}.artist-control{max-width:150px;margin-bottom:6px;padding:5px 8px;font-size:11px}}
+.palette-colors{cursor:grab;user-select:none;-webkit-user-select:none}
+.palette-colors:active{cursor:grabbing}
+.palette-colors .swatch{cursor:pointer}
+.artist-control{background:#e5eee6;border-color:#91aa98;color:#203d32;gap:8px;font-size:13px;padding:7px 12px}
+.artist-control-label{color:#405d4d;font-weight:600}.artist-control strong{color:#1d392e;font-size:14px}.artist-control svg{width:19px;height:19px;stroke:#345b43;stroke-width:1.6}
+.artist-control:hover{background:#dceadd;border-color:#71937a}
+@media(max-width:760px){.artist-control{font-size:12px;padding:5px 8px}.artist-control strong{font-size:12px}.artist-control svg{width:17px;height:17px}}

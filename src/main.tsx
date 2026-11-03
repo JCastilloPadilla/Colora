@@ -8,14 +8,37 @@ import Signature from './SignatureDrawing';
 import sunflowerRegions from './sunflower-regions.json';
 import roseRegions from './rose-solo-regions.json';
 import beachRegions from './beach-regions.json';
+import capybaraRegions from './capybara-regions.json';
 
 const sunflowerColors = ['#eab744','#f3ce68','#94623c','#79a761','#a8d5dc','#e5edf0','#a6bc78','#557f50','#8fae75','#c5cf91'];
 const roseColors = ['#bf3d45','#d7585c','#e8807b','#79a761','#a8d5dc','#e5edf0','#a6bc78','#557f50','#f5e3e1','#c5cf91'];
 const beachColors = ['#add9e2','#edf4f2','#f3c95d','#72a96e','#a9bf8b','#bc8e69','#d28261','#e7d5b2','#78bfca','#b7e0dc','#efd7a6','#bdaba0'];
-function Game({type,active,artist}:{type:'sunflower'|'rose'|'beach';active:boolean;artist:string}){
- const isSunflower=type==='sunflower'; const isBeach=type==='beach';
- const regions=isSunflower?sunflowerRegions:isBeach?beachRegions:roseRegions;
- const colors=isSunflower?sunflowerColors:isBeach?beachColors:roseColors;
+const capybaraColors = ['#c99a74','#ae7d59','#f0aeb3','#f3d4a3','#8daf83','#628968','#c5e6ef','#d58071','#f3e9d7','#d6c6b5','#9bc5cb','#d7ad75','#c7b8df','#ed8b83','#f1c66f'];
+function PaletteColors({children}:{children:React.ReactNode}){
+ const drag=useRef<{startY:number;scrollTop:number;dragging:boolean}|null>(null);
+ const suppressClick=useRef(false);
+ function start(event:React.PointerEvent<HTMLDivElement>){
+  if(event.pointerType!=='mouse'||event.button!==0)return;
+  suppressClick.current=false;
+  drag.current={startY:event.clientY,scrollTop:event.currentTarget.scrollTop,dragging:false};
+ }
+ function move(event:React.PointerEvent<HTMLDivElement>){
+  const state=drag.current;if(!state)return;
+  const distance=event.clientY-state.startY;
+  if(!state.dragging&&Math.abs(distance)>5){state.dragging=true;suppressClick.current=true;event.currentTarget.setPointerCapture(event.pointerId)}
+  if(state.dragging){event.preventDefault();event.currentTarget.scrollTop=state.scrollTop-distance}
+ }
+ function finish(event:React.PointerEvent<HTMLDivElement>){
+  if(drag.current?.dragging){suppressClick.current=true;window.setTimeout(()=>{suppressClick.current=false},0)}
+  if(event.currentTarget.hasPointerCapture(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId);
+  drag.current=null;
+ }
+ return <div className="palette-colors" aria-label="Colores disponibles" onPointerDown={start} onPointerMove={move} onPointerUp={finish} onPointerCancel={finish} onClickCapture={event=>{if(suppressClick.current){event.preventDefault();event.stopPropagation()}}}>{children}</div>;
+}
+function Game({type,active,artist,onEditArtist}:{type:'sunflower'|'rose'|'beach'|'capybara';active:boolean;artist:string;onEditArtist:()=>void}){
+ const isSunflower=type==='sunflower'; const isBeach=type==='beach'; const isCapybara=type==='capybara';
+ const regions=isSunflower?sunflowerRegions:isBeach?beachRegions:isCapybara?capybaraRegions:roseRegions;
+ const colors=isSunflower?sunflowerColors:isBeach?beachColors:isCapybara?capybaraColors:roseColors;
  const [selected,setSelected]=useState<number | null>(1);
  const stageRef=useRef<HTMLDivElement>(null);
  const originalCanvas=useRef<DOMRect | null>(null);
@@ -62,13 +85,14 @@ function Game({type,active,artist}:{type:'sunflower'|'rose'|'beach';active:boole
   });
  }
  function undo(){setGame(current=>{if(current.replayIndex!==null)return current;const previous=undoStroke(current.history); return previous ? {...current,...previous,celebration:null,timeline:[...current.timeline,previous.painted]} : current})}
- return <><main><div className="intro"><div><h1>Un momento de color</h1><p>Elige un color y descubre la ilustración, pieza por pieza.</p></div><div className="counter">{Object.keys(painted).length} de {regions.length} piezas coloreadas</div></div><div className="workspace"><div ref={stageRef} className={`game-stage ${replaying?"replay-stage":""} ${closing?"replay-exit":""}`}><section className="canvas" aria-label="Ilustración para colorear">{replaying&&<div className="replay-sparkles" aria-hidden="true"><i/><i/><i/><i/><i/><i/></div>}<div className={`artwork ${signed?"artwork-signed":""}`}><SunflowerCanvas painted={displayed} colors={colors} celebration={replaying?null:celebration} onPaint={paint} regions={regions} artSrc={isSunflower?"girasol-simplificado.png":isBeach?"playa.png":"rosa-sin-fondo.png"} mapSrc={isSunflower?"girasol-regiones.png":isBeach?"playa-regiones.png":"rosa-sin-fondo-regiones.png"} name={isSunflower?"Girasol":isBeach?"Casa en la playa":"Rosa"} isSunflower={isSunflower}/>{signed&&<div className="artwork-signature" aria-label={`Firmado por ${artist}`}><Signature name={artist}/></div>}</div><div className="palette" aria-label="Selector de colores">{colors.map((color,i)=>regions.some(r=>r.n===i+1)&&<button key={color} className="swatch" aria-label={`Color ${i+1}${available.includes(i+1) ? "" : ", completado"}`} disabled={replaying||!available.includes(i+1)} aria-pressed={activeColor===i+1} onClick={()=>setSelected(i+1)}><span style={{background:color,color:color==='#191919'?'#fff':undefined}}>{i+1}</span></button>)}<button className="tool" aria-label="Deshacer última acción" title="Deshacer" disabled={replaying||!history.length} onClick={undo}>↶</button><button className="tool" aria-label="Borrador" title="Borrador" disabled={replaying} aria-pressed={activeColor===null} onClick={()=>setSelected(null)}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 14 8-8a2 2 0 0 1 3 0l4 4a2 2 0 0 1 0 3l-6 6H8l-4-4a1 1 0 0 1 0-1Zm4 5h12M9 9l7 7"/></svg></button></div></section><div className="stage-progress"><div className="progress-label"><span>{replaying?'Reproduciendo tu proceso':'Tu progreso'}</span><span>{shownPercent}%</span></div><div className="progress"><span style={{width:`${shownPercent}%`}}/></div><div className="message" aria-live="polite">{replaying?(replayIndex===-1?'¡Terminaste! Tu obra está lista ✨':'Así cobró vida tu ilustración'):available.length===0?'¡Terminaste! Completaste todos los colores.':celebration!==null?`¡Completaste el color ${celebration}!`:''}{replaying&&<button className="skip-replay" disabled={closing} onClick={()=>setGame(current=>({...current,closing:true}))}>Saltar animación</button>}</div></div></div></div></main></>;
+ return <><main><div className="intro"><div><div className="intro-title"><h1>Un momento de color</h1>{artist&&<button type="button" className="artist-control" onClick={onEditArtist} aria-label={`Cambiar nombre del autor: ${artist}`} title="Cambiar nombre del autor"><span className="artist-control-label">Autor</span><strong>{artist}</strong><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.1 13.3 20.5 5a1.7 1.7 0 0 0-2.4-2.4l-8.3 6.4"/><path d="M14.1 13.3c-1.3-1.8-2.9-3.2-4.3-4.3L7.7 11a3.3 3.3 0 0 0 4.7 4.7l1.7-2.4Z"/><path d="M7.7 11c-3.1 0-4.7 1.8-4.7 4.4 0 1.4-.7 2.4-1.5 3.1 3.4.6 7.4-.2 8-3"/></svg></button>}</div><p>Elige un color y descubre la ilustración, pieza por pieza.</p></div><div className="counter">{Object.keys(painted).length} de {regions.length} piezas coloreadas</div></div><div className="workspace"><div ref={stageRef} className={`game-stage ${replaying?"replay-stage":""} ${closing?"replay-exit":""}`}><section className="canvas" aria-label="Ilustración para colorear">{replaying&&<div className="replay-sparkles" aria-hidden="true"><i/><i/><i/><i/><i/><i/></div>}<div className={`artwork ${signed?"artwork-signed":""}`}><SunflowerCanvas painted={displayed} colors={colors} celebration={replaying?null:celebration} onPaint={paint} regions={regions} artSrc={isSunflower?"girasol-simplificado.png":isBeach?"playa.png":isCapybara?"capibara.png":"rosa-sin-fondo.png"} mapSrc={isSunflower?"girasol-regiones.png":isBeach?"playa-regiones.png":isCapybara?"capibara-regiones.png?v=10":"rosa-sin-fondo-regiones.png"} name={isSunflower?"Girasol":isBeach?"Casa en la playa":isCapybara?"Capibara con nieve":"Rosa"} isSunflower={isSunflower} hideNumbers={signed}/>{signed&&<div className="artwork-signature" aria-label={`Firmado por ${artist}`}><Signature name={artist}/></div>}</div><div className="palette" aria-label="Selector de colores"><PaletteColors>{colors.map((color,i)=>regions.some(r=>r.n===i+1)&&<button key={color} className="swatch" aria-label={`Color ${i+1}${available.includes(i+1) ? "" : ", completado"}`} disabled={replaying||!available.includes(i+1)} aria-pressed={activeColor===i+1} onClick={()=>setSelected(i+1)}><span style={{background:color,color:color==='#191919'?'#fff':undefined}}>{i+1}</span></button>)}</PaletteColors><div className="palette-tools"><button className="tool" aria-label="Deshacer última acción" title="Deshacer" disabled={replaying||!history.length} onClick={undo}>↶</button><button className="tool" aria-label="Borrador" title="Borrador" disabled={replaying} aria-pressed={activeColor===null} onClick={()=>setSelected(null)}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 14 8-8a2 2 0 0 1 3 0l4 4a2 2 0 0 1 0 3l-6 6H8l-4-4a1 1 0 0 1 0-1Zm4 5h12M9 9l7 7"/></svg></button></div></div></section><div className="stage-progress"><div className="progress-label"><span>{replaying?'Reproduciendo tu proceso':'Tu progreso'}</span><span>{shownPercent}%</span></div><div className="progress"><span style={{width:`${shownPercent}%`}}/></div><div className="message" aria-live="polite">{replaying?(replayIndex===-1?'¡Terminaste! Tu obra está lista ✨':'Así cobró vida tu ilustración'):available.length===0?'¡Terminaste! Completaste todos los colores.':celebration!==null?`¡Completaste el color ${celebration}!`:''}{replaying&&<button className="skip-replay" disabled={closing} onClick={()=>setGame(current=>({...current,closing:true}))}>Saltar animación</button>}</div></div></div></div></main></>;
 }
-type Drawing = 'sunflower' | 'rose' | 'beach';
+type Drawing = 'sunflower' | 'rose' | 'beach' | 'capybara';
 const drawings: {id: Drawing; name: string; image: string}[] = [
  {id:'sunflower',name:'Girasol',image:'girasol-simplificado.png'},
  {id:'rose',name:'Rosa roja',image:'rosa-sin-fondo.png'},
  {id:'beach',name:'Casa en la playa',image:'playa.png'},
+ {id:'capybara',name:'Capibara con nieve',image:'capibara.png'},
 ];
 function ArtistDialog({initialName,onConfirm,onCancel}:{initialName:string;onConfirm:(name:string)=>void;onCancel?:()=>void}){
  const dialog=useRef<HTMLDialogElement>(null);
@@ -81,7 +105,7 @@ function App(){
  const [artist,setArtist]=useState('');
  const [editingArtist,setEditingArtist]=useState(false);
  const [drawing,setDrawing]=useState<Drawing>('sunflower');
- return <><header><div className="brand"><img className="brand-icon" src={`${import.meta.env.BASE_URL}colora-logo.png`} alt=""/><span className="brand-name">Colora<span>.</span></span></div><div className="header-right"><div className="tag">Un pequeño espacio para crear</div>{artist&&<div className="header-artist"><span>Autor: <strong>{artist}</strong></span><button type="button" onClick={()=>setEditingArtist(true)}>Cambiar</button></div>}</div></header><div className="app-layout"><nav className="drawing-rail" aria-label="Elegir ilustración"><h2>Ilustraciones</h2><div className="drawing-list">{drawings.map(item=><button key={item.id} className="drawing-option" aria-pressed={drawing===item.id} onClick={()=>setDrawing(item.id)}><img src={`${import.meta.env.BASE_URL}${item.image}`} alt=""/><span>{item.name}</span></button>)}</div></nav><div className="game-view"><div hidden={drawing!=='sunflower'}><Game type="sunflower" active={drawing==='sunflower'} artist={artist}/></div><div hidden={drawing!=='rose'}><Game type="rose" active={drawing==='rose'} artist={artist}/></div><div hidden={drawing!=='beach'}><Game type="beach" active={drawing==='beach'} artist={artist}/></div></div>{(!artist||editingArtist)&&<ArtistDialog initialName={artist} onConfirm={name=>{setArtist(name);setEditingArtist(false)}} onCancel={artist?()=>setEditingArtist(false):undefined}/>}</div></>;
+ return <><header><div className="brand"><img className="brand-icon" src={`${import.meta.env.BASE_URL}colora-logo.png`} alt=""/><span className="brand-name">Colora<span>.</span></span></div><div className="tag">Un pequeño espacio para crear</div></header><div className="app-layout"><nav className="drawing-rail" aria-label="Elegir ilustración"><h2>Ilustraciones</h2><div className="drawing-list">{drawings.map(item=><button key={item.id} className="drawing-option" aria-pressed={drawing===item.id} onClick={()=>setDrawing(item.id)}><img src={`${import.meta.env.BASE_URL}${item.image}`} alt=""/><span>{item.name}</span></button>)}</div></nav><div className="game-view"><div hidden={drawing!=='sunflower'}><Game type="sunflower" active={drawing==='sunflower'} artist={artist} onEditArtist={()=>setEditingArtist(true)}/></div><div hidden={drawing!=='rose'}><Game type="rose" active={drawing==='rose'} artist={artist} onEditArtist={()=>setEditingArtist(true)}/></div><div hidden={drawing!=='beach'}><Game type="beach" active={drawing==='beach'} artist={artist} onEditArtist={()=>setEditingArtist(true)}/></div><div hidden={drawing!=='capybara'}><Game type="capybara" active={drawing==='capybara'} artist={artist} onEditArtist={()=>setEditingArtist(true)}/></div></div>{(!artist||editingArtist)&&<ArtistDialog initialName={artist} onConfirm={name=>{setArtist(name);setEditingArtist(false)}} onCancel={artist?()=>setEditingArtist(false):undefined}/>}</div></>;
 }
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App/></React.StrictMode>);
 

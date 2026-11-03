@@ -70,3 +70,29 @@ it('prepara trazos reales para nombres con espacios y acentos', () => {
   expect(result!.width).toBeGreaterThan(0);
   expect(makeSignature('李')).toBeNull();
 });
+
+import { numberOpacity } from './game';
+it('desvanece los números y los recupera al volver a editar', () => {
+  expect(numberOpacity(false, 500)).toBe(1);
+  expect(numberOpacity(true, 0)).toBe(1);
+  expect(numberOpacity(true, 650)).toBeCloseTo(.5);
+  expect(numberOpacity(true, 1300)).toBe(0);
+  expect(numberOpacity(true, 100, true)).toBe(0);
+});
+
+import capybaraRegions from './src/capybara-regions.json';
+it('prepara el capibara con más piezas, números válidos e identificadores consecutivos', () => {
+  expect(capybaraRegions.length).toBeGreaterThan(regions.length);
+  expect(capybaraRegions.every((r,i)=>r.id===String(i+1)&&r.x>=20&&r.x<=1234&&r.y>=20&&r.y<=1234&&r.n>=1&&r.n<=15)).toBe(true);
+});
+
+it('distingue la lengua del capibara de la nieve', () => {
+  expect(capybaraRegions.find(region=>region.id==='89')?.n).toBe(3);
+  expect(capybaraRegions.find(region=>region.id==='91')?.n).toBe(13);
+});
+
+it('asigna los colores revisados al cielo, letrero, muebles y lámpara', () => {
+  const color=(id:string)=>capybaraRegions.find(region=>region.id===id)?.n;
+  expect([color('22'),color('18'),color('153'),color('166'),color('210')]).toEqual([7,13,10,10,15]);
+  expect([color('128'),color('133'),color('211'),color('212'),color('213')]).toEqual([9,5,2,9,11]);
+});

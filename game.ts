@@ -20,3 +20,8 @@ export function newlyCompletedColor(regions: ReadonlyArray<{id:string; n:number}
 export function normalizeArtistName(name: string): string {
   return name.trim().replace(/\s+/gu, ' ');
 }
+export function numberOpacity(finished: boolean, elapsed: number, reducedMotion = false): number {
+  if (!finished) return 1;
+  if (reducedMotion) return 0;
+  return Math.max(0, Math.min(1, 1 - elapsed / 1300));
+}
