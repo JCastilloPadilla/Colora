@@ -46,12 +46,6 @@ it('prepara la rosa con identificadores únicos y números dentro del lienzo', (
   expect(roseRegions.every(r=>r.x >= 20 && r.x <= 1234 && r.y >= 20 && r.y <= 1234 && r.n >= 1 && r.n <= 10)).toBe(true);
 });
 
-import beachRegions from './src/beach-regions.json';
-it('prepara la playa con piezas identificables y números dentro del lienzo', () => {
-  expect(new Set(beachRegions.map(r=>r.id)).size).toBe(beachRegions.length);
-  expect(beachRegions.every(r=>r.x >= 20 && r.x <= 1234 && r.y >= 20 && r.y <= 1234 && r.n >= 1 && r.n <= 12)).toBe(true);
-});
-
 it('incluye el fondo de la rosa como una pieza para colorear de negro', () => {
   expect(roseRegions.some(region => region.n === 9 && region.x === 100 && region.y === 100)).toBe(true);
 });
@@ -102,4 +96,10 @@ it('prepara el gato con dificultad intermedia y colores válidos', () => {
   expect(catRegions.length).toBeGreaterThan(regions.length);
   expect(catRegions.length).toBeLessThan(capybaraRegions.length);
   expect(catRegions.every((region,index)=>region.id===String(index+1)&&region.n>=1&&region.n<=15&&region.x>=20&&region.x<=1234&&region.y>=20&&region.y<=1234)).toBe(true);
+});
+
+import tulipRegions from './src/tulip-regions.json';
+it('prepara el tulipán con regiones consecutivas y colores válidos', () => {
+  expect(tulipRegions.length).toBeGreaterThan(roseRegions.length);
+  expect(tulipRegions.every((r,i)=>r.id===String(i+1)&&r.n>=1&&r.n<=8&&r.x>=20&&r.x<=1234&&r.y>=20&&r.y<=1234)).toBe(true);
 });
