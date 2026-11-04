@@ -248,3 +248,23 @@ header{flex:0 0 72px}
 .drawing-option img{width:min(100%,clamp(34px,calc((100dvh - 260px)/5),100px))}
 @media(max-width:760px){.drawing-option img{width:min(100%,clamp(28px,calc((100dvh - 240px)/5),60px))}}
 .drawing-option img[src$="/gato.png"]{object-view-box:inset(1.7%)}
+.site-footer{flex:0 0 auto;display:flex;align-items:center;gap:5px;min-height:30px;padding:5px 20px;color:#536b5e;font-size:12px;line-height:1.3}
+.site-footer svg{flex:none;width:15px;height:15px;fill:#dc4e55;stroke:#c33b45;stroke-width:1;stroke-linejoin:round}
+@media(max-width:760px){.site-footer{padding:5px 10px;font-size:11px}}
+.download-artwork{display:flex;align-items:center;justify-content:center;gap:7px;margin:4px auto 0;padding:7px 13px;border:1px solid #9db4a1;border-radius:7px;background:#f9faf6;color:#34533f;font:600 13px system-ui;cursor:pointer}
+.download-artwork:hover{background:#e7f0e7}.download-artwork:focus-visible{outline:2px solid #587b60;outline-offset:2px}
+.download-artwork svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.download-error{text-align:center;font-size:12px;color:#a4513d;margin:3px 0}
+/* Reservar espacio para el progreso y la descarga sin recortar el marco. */
+.game-stage:not(.replay-stage){container-type:size}
+.artwork-signed{width:min(calc(100% - 58px),600px,calc(100dvh - 380px))}
+@supports (width: 100cqh){.artwork-signed{width:min(calc(100% - 58px),600px,calc(100cqh - 180px))}}
+@media(max-width:760px){.artwork-signed{width:min(calc(100% - 38px),calc(100dvh - 355px))}@supports (width: 100cqh){.artwork-signed{width:min(calc(100% - 38px),calc(100cqh - 165px))}}}
+/* Dar aire a la celebración sin desplazar el marco. */
+.stage-progress:has(.download-artwork){margin-top:14px}
+.stage-progress:has(.download-artwork) .message{margin-top:10px}
+.download-artwork{margin-top:12px;padding:9px 17px;border-color:#9cb8a1;background:linear-gradient(110deg,#e4f2e3,#f5e6d8,#e1eff0,#e4f2e3);background-size:300% 100%;animation:download-gradient 7s ease-in-out infinite;color:#284b39}
+.download-artwork:hover{background:linear-gradient(110deg,#d7ebd7,#f0ddce,#d4e9e8,#d7ebd7);background-size:300% 100%}
+@keyframes download-gradient{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@media(prefers-reduced-motion:reduce){.download-artwork{animation:none}}
+@supports (width: 100cqh){.artwork-signed{width:min(calc(100% - 58px),600px,calc(100cqh - 210px))}@media(max-width:760px){.artwork-signed{width:min(calc(100% - 38px),calc(100cqh - 195px))}}}
